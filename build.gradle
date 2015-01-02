@@ -15,4 +15,7 @@ dependencies {
     compile "org.springframework:spring-core:$springVersion"
     compile "org.springframework:spring-context-support:$springVersion"
     compile "org.codehaus.groovy:groovy-all:2.1.0"
+    compile 'org.projectlombok:lombok:1.14.8'
+    compile 'org.spockframework:spock-maven:0.7-groovy-2.0'
+
 }
