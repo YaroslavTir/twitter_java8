@@ -4,10 +4,9 @@ import domain.Twit;
 import domain.User;
 import domain.UserSubscribe;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * @author ymolodkov
@@ -25,13 +24,38 @@ public class TwitDAOImpl implements TwitDAO {
     private AtomicInteger atomicInteger = new AtomicInteger(0);
 
     @Override
-    public long countTwitsByUserName() {
+    public long countTwitsByUserName(String name) {
         long count = twits.values().stream()
-                .filter(twit -> {
-                    return twit.getText().contains("Artem");
-                })
+                .filter(twit -> twit.getText().contains(name))
                 .count();
         return count;
+    }
+
+
+    @Override
+    public List<String> collectList() {
+        List<String> list = twits.values().stream()
+                .map(twit -> twit.getText())
+                .collect(ArrayList::new, List::add, List::addAll);
+//                .collect(() -> new ArrayList<String>(),
+//                        (a, b) -> a.add(b),
+//                        (l1, l2) -> l1.addAll(l2));
+        return list;
+    }
+
+    @Override
+    public Map<Boolean, List<Twit>> mapByName(String name) {
+        Map<Boolean, List<Twit>> map = twits.values().stream()
+                .collect(Collectors.partitioningBy(twit -> twit.getText().contains(name)));
+        return map;
+    }
+
+    @Override
+    public String stringTextByName(String name) {
+        String allTexts = twits.values().stream()
+                .map(t -> t.getText())
+                .collect(Collectors.joining(";"));
+        return allTexts;
     }
 
     @Override
